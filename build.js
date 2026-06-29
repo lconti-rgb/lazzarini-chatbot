@@ -5,8 +5,8 @@ const js = readFileSync('src/widget.js', 'utf-8');
 
 const bundle = js.replace('__CSS_PLACEHOLDER__', JSON.stringify(css));
 
-mkdirSync('dist', { recursive: true });
-writeFileSync('dist/widget.bundle.js', bundle);
+mkdirSync('public', { recursive: true });
+writeFileSync('public/widget.bundle.js', bundle);
 
 const sizeKB = (bundle.length / 1024).toFixed(1);
-console.log(`✓ dist/widget.bundle.js — ${sizeKB} KB`);
+console.log(`✓ public/widget.bundle.js — ${sizeKB} KB`);
