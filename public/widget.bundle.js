@@ -224,7 +224,7 @@
     }
 
     const summary = messages
-      .map(m => `${m.role === 'user' ? 'Cliente' : 'Bot'}: ${m.content}`)
+      .map(m => `${m.role === 'user' ? 'Cliente' : 'Bot'}: ${m.content.replace(/\n+/g, ' ')}`)
       .join('\n');
 
     const form = document.getElementById('lz-lead-form');
