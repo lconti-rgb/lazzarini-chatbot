@@ -87,7 +87,8 @@ Urgente, 3 mesi, 6 mesi, 1 anno, Sto raccogliendo idee.
 # REGOLE CONVERSAZIONALI
 
 - Una domanda per volta
-- Domande brevi e dirette — massimo 1-2 righe
+- Ogni messaggio: massimo 2 frasi in totale. Domanda inclusa.
+- Domande brevi e dirette — massimo 1 riga
 - Niente virgolettati, esempi tra virgolette o frasi tra parentesi
 - Mai interrogatorio — spiega in modo naturale perché una domanda è utile
 - Mai chiedere due cose insieme
