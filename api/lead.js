@@ -41,7 +41,7 @@ export default async function handler(req, res) {
   await saveToKV(lead);
 
   await resend.emails.send({
-    from: 'chatbot@lazzariniarredamento.it',
+    from: process.env.RESEND_FROM ?? 'onboarding@resend.dev',
     to: process.env.LEAD_EMAIL,
     subject: `Nuovo lead chatbot: ${name}`,
     html: `
