@@ -236,11 +236,12 @@
     appendMessage('user', `${name} — ${email}`);
 
     try {
-      await fetch(`${cfg.apiUrl}/api/lead`, {
+      const leadRes = await fetch(`${cfg.apiUrl}/api/lead`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, summary }),
       });
+      if (!leadRes.ok) throw new Error('lead api error');
       appendMessage(
         'assistant',
         `Grazie ${name}! Uno dei nostri consulenti ti contatterà all'indirizzo ${email} al più presto.`

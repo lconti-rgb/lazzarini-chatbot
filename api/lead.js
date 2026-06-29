@@ -10,6 +10,8 @@ export default async function handler(req, res) {
 
   const { name, email, summary } = req.body;
 
+  const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
   if (!name || !email) {
     return res.status(400).json({ error: 'name e email sono richiesti' });
   }
@@ -30,9 +32,9 @@ export default async function handler(req, res) {
     subject: `Nuovo lead chatbot: ${name}`,
     html: `
       <h2>Nuovo lead dal chatbot</h2>
-      <p><strong>Nome:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Riepilogo conversazione:</strong><br>${summary ?? 'Non disponibile'}</p>
+      <p><strong>Nome:</strong> ${esc(name)}</p>
+      <p><strong>Email:</strong> ${esc(email)}</p>
+      <p><strong>Riepilogo conversazione:</strong><br>${esc(summary ?? 'Non disponibile')}</p>
     `,
   });
 
