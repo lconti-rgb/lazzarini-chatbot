@@ -4,6 +4,9 @@ import { join } from 'path';
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
+// Caricato una volta al cold start — fail fast se il file manca
+const systemPrompt = readFileSync(join(process.cwd(), 'prompts', 'system.txt'), 'utf-8');
+
 const rateLimitMap = new Map();
 
 function checkRateLimit(ip) {
@@ -14,8 +17,9 @@ function checkRateLimit(ip) {
   const record = rateLimitMap.get(ip) ?? { count: 0, resetAt: now + windowMs };
 
   if (now > record.resetAt) {
-    record.count = 0;
-    record.resetAt = now + windowMs;
+    // Finestra scaduta: rimuovi l'entry e ricomincia
+    rateLimitMap.delete(ip);
+    return true;
   }
 
   record.count += 1;
@@ -39,8 +43,6 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'messages è richiesto e non può essere vuoto' });
   }
 
-  const systemPrompt = readFileSync(join(process.cwd(), 'prompts', 'system.txt'), 'utf-8');
-
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
@@ -60,7 +62,8 @@ export default async function handler(req, res) {
     }
 
     res.write('data: [DONE]\n\n');
-  } catch {
+  } catch (err) {
+    console.error('[/api/chat] Anthropic error:', err);
     res.write(`data: ${JSON.stringify({ error: 'Errore interno del server' })}\n\n`);
   }
 
