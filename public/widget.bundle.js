@@ -224,7 +224,6 @@
     }
 
     const summary = messages
-      .slice(-6)
       .map(m => `${m.role === 'user' ? 'Cliente' : 'Bot'}: ${m.content}`)
       .join('\n');
 

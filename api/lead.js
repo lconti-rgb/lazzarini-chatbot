@@ -81,8 +81,14 @@ export default async function handler(req, res) {
         <tr>
           <td style="padding:24px 32px 0;">
             <p style="margin:0 0 10px;font-size:13px;color:#888;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Riepilogo conversazione</p>
-            <div style="background:#f9f9f9;border-left:3px solid #c9a96e;padding:16px;border-radius:0 6px 6px 0;font-size:14px;color:#444;line-height:1.7;">
-              ${esc(summary ?? 'Non disponibile').replace(/\n/g, '<br>')}
+            <div style="background:#f9f9f9;border-left:3px solid #c9a96e;padding:16px;border-radius:0 6px 6px 0;font-size:14px;line-height:1.7;">
+              ${(summary ?? 'Non disponibile').split('\n').map(line => {
+                const isBot = line.startsWith('Bot:');
+                const color = isBot ? '#2c2c2c' : '#c9a96e';
+                const label = isBot ? 'Bot' : 'Cliente';
+                const text = esc(line.replace(/^(Bot|Cliente):\s*/, ''));
+                return `<p style="margin:0 0 6px;"><span style="font-weight:700;color:${color};font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">${label}</span><br><span style="color:#444;">${text}</span></p>`;
+              }).join('')}
             </div>
           </td>
         </tr>
