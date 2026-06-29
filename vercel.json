@@ -1,0 +1,16 @@
+{
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/api/:path*" }
+  ],
+  "functions": {
+    "api/*.js": {
+      "runtime": "@vercel/node@5"
+    }
+  },
+  "headers": [
+    {
+      "source": "/dist/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600" }]
+    }
+  ]
+}
