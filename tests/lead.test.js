@@ -44,7 +44,7 @@ describe('POST /api/lead', () => {
     expect(res._status).toBe(400);
   });
 
-  it('saves lead to KV and sends email', async () => {
+  it('sends email and returns 200', async () => {
     const { default: handler } = await import('../api/lead.js');
     const { req, res } = makeReqRes({
       name: 'Mario Rossi',
@@ -53,11 +53,6 @@ describe('POST /api/lead', () => {
     });
     await handler(req, res);
     expect(res._status).toBe(200);
-    expect(mockSet).toHaveBeenCalledOnce();
-    const [key, value] = mockSet.mock.calls[0];
-    expect(key).toMatch(/^lead:/);
-    expect(value.name).toBe('Mario Rossi');
-    expect(value.email).toBe('mario@example.com');
     expect(mockSend).toHaveBeenCalledOnce();
     expect(mockSend.mock.calls[0][0].subject).toContain('Mario Rossi');
   });

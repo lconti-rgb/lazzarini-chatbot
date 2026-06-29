@@ -1,7 +1,16 @@
 import { Resend } from 'resend';
-import { kv } from '@vercel/kv';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+
+async function saveToKV(lead) {
+  if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) return;
+  try {
+    const { kv } = await import('@vercel/kv');
+    await kv.set(`lead:${Date.now()}`, lead);
+  } catch (err) {
+    console.warn('[/api/lead] KV not available, skipping backup:', err.message);
+  }
+}
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -29,8 +38,7 @@ export default async function handler(req, res) {
     createdAt: new Date().toISOString(),
   };
 
-  const key = `lead:${Date.now()}`;
-  await kv.set(key, lead);
+  await saveToKV(lead);
 
   await resend.emails.send({
     from: 'chatbot@lazzariniarredamento.it',
