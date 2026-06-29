@@ -43,7 +43,7 @@ export default async function handler(req, res) {
   await resend.emails.send({
     from: process.env.RESEND_FROM ?? 'onboarding@resend.dev',
     to: process.env.LEAD_EMAIL,
-    subject: `Nuovo lead chatbot: ${name}`,
+    subject: `Nuovo lead chatbot: ${name} (${summary.split('\n').length} messaggi)`,
     html: `
 <!DOCTYPE html>
 <html lang="it">
