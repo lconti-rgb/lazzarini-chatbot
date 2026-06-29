@@ -18,6 +18,8 @@ function makeReqRes(body = {}) {
   const res = {
     _status: 200,
     _body: null,
+    setHeader() { return this; },
+    end() { return this; },
     status(code) { this._status = code; return this; },
     json(data) { this._body = data; return this; },
   };
